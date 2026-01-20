@@ -10,8 +10,8 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #581c87 0%, #6b21a8 50%, #4338ca 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, #fefce8 0%, #ffffff 50%, #fef9c3 100%);
+  color: #1f2937;
   min-height: 100vh;
 }
 
@@ -22,14 +22,14 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
+  background: #f3f4f6;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
+  background: #eab308;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
+  background: #ca8a04;
 }

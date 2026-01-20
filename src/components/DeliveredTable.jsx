@@ -1,12 +1,11 @@
 import { useOrders } from '../context/OrderContext';
-import StatusDropdown from './StatusDropdown';
 import { format } from 'date-fns';
 
-function OrdersTable() {
-  const { orders, updateOrderStatus } = useOrders();
+function DeliveredTable() {
+  const { orders } = useOrders();
 
-  // Filter to show only orders with status 'orders' (not delivered)
-  const pendingOrders = orders.filter(order => order.status === 'orders');
+  // Filter to show only delivered orders
+  const deliveredOrders = orders.filter(order => order.status === 'delivered');
 
   const formatDate = (dateString) => {
     if (!dateString) return '-';
@@ -17,27 +16,26 @@ function OrdersTable() {
     }
   };
 
-  const handleStatusChange = (orderId, newStatus) => {
-    updateOrderStatus(orderId, newStatus);
-  };
-
   // Generate Google Maps URL from address
   const getGoogleMapsUrl = (address) => {
     return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
   };
 
   return (
-    <div className="bg-white rounded-xl border border-yellow-200 shadow-lg overflow-hidden">
-      <div className="p-6 border-b border-yellow-200 bg-yellow-50">
+    <div className="bg-white rounded-xl border border-green-200 shadow-lg overflow-hidden">
+      <div className="p-6 border-b border-green-200 bg-green-50">
         <h2 className="text-lg font-semibold text-gray-800">
-          Pending Orders ({pendingOrders.length})
+          Delivered Orders ({deliveredOrders.length})
         </h2>
+        <p className="text-sm text-gray-500 mt-1">
+          Orders that have been successfully delivered
+        </p>
       </div>
 
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-yellow-100 bg-yellow-50/50">
+            <tr className="border-b border-green-100 bg-green-50/50">
               <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">
                 Order ID
               </th>
@@ -60,15 +58,18 @@ function OrdersTable() {
                 Order Received
               </th>
               <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">
+                Delivered At
+              </th>
+              <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">
                 Status
               </th>
             </tr>
           </thead>
           <tbody>
-            {pendingOrders.map((order) => (
+            {deliveredOrders.map((order) => (
               <tr
                 key={order.id}
-                className="border-b border-yellow-50 hover:bg-yellow-50/50 transition-colors"
+                className="border-b border-green-50 hover:bg-green-50/50 transition-colors"
               >
                 <td className="px-6 py-4 text-sm text-gray-800 font-medium">
                   {order.orderNumber}
@@ -107,20 +108,26 @@ function OrdersTable() {
                     <span className="text-gray-400">-</span>
                   )}
                 </td>
+                <td className="px-6 py-4 text-sm">
+                  {order.deliveredAt ? (
+                    <span className="text-green-600 font-medium">{formatDate(order.deliveredAt)}</span>
+                  ) : (
+                    <span className="text-gray-400">-</span>
+                  )}
+                </td>
                 <td className="px-6 py-4">
-                  <StatusDropdown
-                    currentStatus={order.status}
-                    onStatusChange={(newStatus) => handleStatusChange(order.id, newStatus)}
-                  />
+                  <span className="px-4 py-2 rounded-lg font-medium bg-green-500 text-white">
+                    Delivered
+                  </span>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
 
-        {pendingOrders.length === 0 && (
+        {deliveredOrders.length === 0 && (
           <div className="px-6 py-12 text-center text-gray-500">
-            No pending orders. All orders have been delivered!
+            No delivered orders yet.
           </div>
         )}
       </div>
@@ -128,4 +135,4 @@ function OrdersTable() {
   );
 }
 
-export default OrdersTable;
+export default DeliveredTable;
